@@ -1,0 +1,9 @@
+	1	2	3	4	5	6	7	8	9	10	11	12
+A									X	X	X	X
+B									X	X	X	X
+C									X	X	X	X
+D									X	X	X	X
+E									X	X	X	X
+F									X	X	X	X
+G									X	X	X	X
+H										X	X	X

@@ -1,0 +1,3 @@
+PlateCorrection	Calibrator
+Sample	4_1
+Gene	ParA

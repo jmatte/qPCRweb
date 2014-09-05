@@ -1,0 +1,9 @@
+	1	2	3	4	5	6	7	8	9	10	11	12
+A	SodA	SodA	SodA	SodA	SodA	SodA	SodA	SodA	SodA			
+B	SodA	SodA	SodA	SodA	SodA	SodA	SodA	SodA	SodA			
+C	OtsA	OtsA	OtsA	OtsA	OtsA	OtsA	OtsA	OtsA	OtsA			
+D	OtsA	OtsA	OtsA	OtsA	OtsA	OtsA	OtsA	OtsA	OtsA			
+E	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2			
+F	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2	Rpon2			
+G	ParA	ParA	ParA	ParA	ParA	ParA	ParA	ParA	ParA			
+H	ParA	ParA	ParA	ParA	ParA	ParA	ParA	ParA	ParA			

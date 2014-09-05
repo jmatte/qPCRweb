@@ -1,0 +1,5 @@
+	Samples	Group	Linkage
+1	3G	Control	
+2	3N	Treatment	1
+3	3B	Treatment	1
+4	DNA	Treatment	1

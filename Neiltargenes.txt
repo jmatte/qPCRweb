@@ -1,0 +1,7 @@
+	Target Genes
+1	SodA
+2	OtsA
+3	Rpon2
+4	aceA
+5	ltpD
+6	pspA

@@ -1,0 +1,9 @@
+	1	2	3	4	5	6	7	8	9	10	11	12
+A	aceA	aceA	aceA	aceA	aceA	aceA	aceA	aceA	aceA			
+B	aceA	aceA	aceA	aceA	aceA	aceA	aceA	aceA	aceA			
+C	pspA	pspA	pspA	pspA	pspA	pspA	pspA	pspA	pspA			
+D	pspA	pspA	pspA	pspA	pspA	pspA	pspA	pspA	pspA			
+E	ltpD	ltpD	ltpD	ltpD	ltpD	ltpD	ltpD	ltpD	ltpD			
+F	ltpD	ltpD	ltpD	ltpD	ltpD	ltpD	ltpD	ltpD	ltpD			
+G	ParA	ParA	ParA	ParA	ParA	ParA	ParA	ParA	ParA			
+H	ParA	ParA	ParA	ParA	ParA	ParA	ParA	ParA	ParA			
