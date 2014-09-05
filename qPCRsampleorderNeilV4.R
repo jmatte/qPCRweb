@@ -1,22 +1,11 @@
-source("qPCRcodeV4Neil.R")
-rm(DataNeil)
-rm(Neilraw)
-rm(Neilraw_log_Data)
-rm(dydx)
-rm(curv)
-rm(Inflection_point)
-rm(Init_Value)
-rm(Parameters)
-rm(log_Data)
-
+# source("qPCRcodeV4Neil.R")
 
 # data from Neil
 
-inf_curves
+head(inf_curves)
 
 Samples <- read.table("Neilsamples.txt", fill = T)
-RefGene <- read.table("Neilrefgenes.txt", fill = T, header = T)
-TarGene <- read.table("Neiltargenes.txt", fill = T, header = T)
+Genes <- read.table("Neilgenes.txt", fill = T, header = T)
 
 
 p1s <- read.table("Neilplate1samples.txt", fill = T, header = T, nrows = 8) 
@@ -51,16 +40,8 @@ plates <- inf_curves[,1]
 tmp <- strsplit(inf_curves$Well,'_')
 tmp <- do.call(rbind,tmp)
 
-well = "A1"
-
-
 paste0('p',tmp[,1],'g')
 tmp[,2]
-
-inf_curves$gene <- mapply(find_gene,plate=paste0('p',tmp[,1],'g'),well=tmp[,2])
-inf_curves$sample <- mapply(find_gene,plate=paste0('p',tmp[,1],'s'),well=tmp[,2])
-
-head(inf_curves)
 
 find_gene <- function(plate,well){
     plate_ <- get(plate,envir=.GlobalEnv)
@@ -69,17 +50,22 @@ find_gene <- function(plate,well){
     as.character(plate_[which(rownames(plate_) == y),as.numeric(x)])
 }
 
-par(mfcol = c(3,3))
-tapply(inf_curves$slope,inf_curves$gene,function(x){
 
-})
+inf_curves$gene <- mapply(find_gene,plate=paste0('p',tmp[,1],'g'),well=tmp[,2])
+inf_curves$sample <- mapply(find_gene,plate=paste0('p',tmp[,1],'s'),well=tmp[,2])
+inf_curves$code <- paste(inf_curves$gene,inf_curves$sample,sep = "_") # we culd use a code.. match(inf_curves$gene[1],Genes[,1])
+    
+head(inf_curves)
 
+#technical replicates
 
-for(plate in 1:2){
-    for(well)
-}
-substr(inf_curves[1,1],1,1)
-substr(inf_curves[1,1],3,nchar(inf_curves[1,1]))
+tRepAv <- tapply(inf_curves$Ri,inf_curves$code,mean)
+tRepSD <- tapply(inf_curves$Ri,inf_curves$code,sd)
+
+tRepAv[2]
+tRepSD[1]
+
+levels(inf_curves$code)
 
 #Samples 3G, 3N, 3B
 

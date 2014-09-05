@@ -1,5 +1,4 @@
 # This is a real data. with 40 cycles
-
 DataNeil <- read.table("qPCRDataNeil.txt") 
 DataNeil[,1] <- paste(DataNeil[,1],DataNeil[,2],sep = "_")
 DataNeil[,2] <- NULL
@@ -21,7 +20,7 @@ for(i in 1:(length(Neilmax)-1)){
     dydxmax[i] <- (Neilmax[(i + 1)]-Neilmax[i])
 }
 
-plot(1:39,dydxmax)
+# plot(1:39,dydxmax)
 
 maxinfpoint <- which.max(x = dydxmax)
 
@@ -40,7 +39,7 @@ log_dydxmax <- rapply(as.list(dydxmax),function(n){  # in raw data for more curv
     }
 })
 
-plot(1:maxinfpoint,log_dydxmax[1:maxinfpoint])
+# plot(1:maxinfpoint,log_dydxmax[1:maxinfpoint])
 
 dydxmin <- maxinfpoint - 3
 
@@ -135,7 +134,7 @@ Init_Value(Neilraw_log_Data)
 
 inf_curves
 
-plot(1:40,Neilraw[65,])
+plot(1:40,Neilraw[144,])
 test144 <- vector()
 for(i in 1:40){
     test144[i] <- inf_curves[144,10]*(inf_curves[144,8]^i)

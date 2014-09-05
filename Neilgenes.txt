@@ -1,0 +1,8 @@
+	Genes	Condition
+1	ParA	Reference
+2	SodA	Target
+3	OtsA	Target
+4	Rpon2	Target
+5	aceA	Target
+6	ltpD	Target
+7	pspA	Target
