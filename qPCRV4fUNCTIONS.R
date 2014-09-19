@@ -38,7 +38,7 @@ Inflection_point <- function(rawData = NULL){
 
 ############ New Object 1 ###########################################
 inf_curves <- data.frame(Well = NA, inf_point = NA, a = NA, b = NA, "R^2" = NA, 
-                         slope = NA, C = NA, Eff = NA, "Eff%" = NA, Ri = NA)         # the second value is the inlfection point
+                         "slope(x~y)" = NA, CtY0 = NA, Eff = NA, "Eff'%'" = NA, Ri = NA)         # the second value is the inlfection point
 
 #####################################################################
 
@@ -67,10 +67,16 @@ log_Data <- function(rawData = NULL,Name = "logData"){
 
 
 ############ FUNCTION 4 ############################################
+# TEST
+# log_Data = Rod1_log_Data
+# cur = 2
+# rm(log_Data)
+# rm(cur)
+# rm(bestline)
+# rm(count)
+
+
 Init_Value <- function (log_Data = NULL){
-    # matrix to record the result
-    
-    # Result_Data <<- matrix(data = NA, nrow = Par$curves, ncol = 8, dimnames = list(NULL, c("a","b","R^2","slope","C","Eff","Eff%","Ri")))
     for (cur in 1:Par$curves){ # first loop to do the same for each curve.
         # matrix to record the R^2 of combinations
         bestline <- matrix(data = NA, nrow = Values$it, ncol = 5) #should be out of the loop and the nrow in this case is the max iteraction
@@ -90,32 +96,32 @@ Init_Value <- function (log_Data = NULL){
         for (i in Par$Start:inf_curves[cur,2]) {        # in this case is inflection point
             for (j in inf_curves[cur,2]:Par$Start) {
                 if ( (i < j) & (j-i >= Par$dif) ) {
-                    
-                    Datatest <- as.data.frame(t(rbind(i:j,log_Data[cur,(i:j)])))
-                    bestline[count,1:2] <- (c(i,j))
-                    Temp_Data_lm <- lm(Datatest[,1] ~ Datatest[,2]) # I use this order so the lm didn't complain.
-                    bestline[count,3] <- summary(Temp_Data_lm)$r.squared
-                    bestline[count,4] <- Temp_Data_lm$coefficients[[2]]
-                    bestline[count,5] <- -Temp_Data_lm$coefficients[[1]]/Temp_Data_lm$coefficients[[2]]
+                    Temp_Data_lm <- lm((i:j) ~ (log_Data[cur,(i:j)])) # known Y ~ known X, to get the right slope
+                    bestline[count,1:2] <- (c(i,j))# 3 a, 4 b
+                    bestline[count,3] <- summary(Temp_Data_lm)$r.squared # 5 R^2
+                    bestline[count,4] <- Temp_Data_lm$coefficients[[2]] # 6 slope(x~y)
+                    bestline[count,5] <- Temp_Data_lm$coefficients[[1]] # 7 CtY0 cycle where R is 0
                     count <- count + 1
                 } 
             }
         }
-        #bestline <- bestline[(1:count-1),] # not really necesary
         bestline <- bestline[(bestline[,4] < Par$slope_min) & (bestline[,4] > Par$slope_max),] 
         bestline <- bestline[complete.cases(bestline),]
+        bestline <- as.matrix(bestline)
+        if(ncol(bestline) == 1) bestline <- t(bestline)
         
-        if(nrow(bestline)>0){       # To skip the error
-            inf_curves[cur,3:7] <<- bestline[which.max(bestline[,3]),] #copy the result of the loop
-            inf_curves[cur,8] <<- (10^(1/inf_curves[cur,6])-1)+1 # convert the slope in efficiency
-            inf_curves[cur,9] <<- (inf_curves[cur,8]-1)*100 # probably unecesary 
-            inf_curves[cur,10] <<- 10^(inf_curves[cur,7]) #is the anti log of C
+        if(nrow(bestline)!=0){       # To skip the error
+            inf_curves[cur,3:7]  <<- bestline[which.max(bestline[,3]),] #copy the best R^2 line to info curves
+            inf_curves[cur,8]    <<- (10^(1/inf_curves[cur,6])-1)+1 # 8 convert the slope in efficiency
+            inf_curves[cur,9]    <<- (inf_curves[cur,8]-1)*100 # 9 slope in %, probably unecesary
+            inf_curves[cur,10]   <<- 10^(-inf_curves[cur,7]/inf_curves[cur,6]) 
+                                                        # 10 Ri, is the anti log of C when Y is 0
+                                                        # or the level of emmission at the cycle 0
         } else {
             inf_curves[cur,3:10] <<- NA
         }
     }
 }
-
 
 #####################################################################
 

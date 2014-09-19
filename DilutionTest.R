@@ -1,26 +1,29 @@
-# This is a real data. with 40 cycles
-DataNeil <- read.table("qPCRDataNeil.txt") 
-DataNeil[,1] <- paste(DataNeil[,1],DataNeil[,2],sep = "_")
-DataNeil[,2] <- NULL
+# Test DilutionJPolddata
 
-Neilraw <- DataNeil[,2:41]  # 2 to 41 is te data
-## plot(1:40,Neilraw[3,])
+Dilution <- read.table("dilutions.txt") 
 
+DilutionRaw <- Dilution[,2:51]  # 2 to 51 is te data
+
+### No
+plot(1:50,DilutionRaw[5,])
+for (i in 1:7){
+    points(1:50,DilutionRaw[i,], col=i)
+}
 
 # one way to optimize is to find the region where the data is important
 # or filtrate the background
 
-Neilmax <- apply(X = Neilraw,MARGIN = 2,FUN = max)
+DilutionMAX <- apply(X = DilutionRaw,MARGIN = 2,FUN = max)
 
 
-# plot(1:40,Neilmax)
+# plot(1:50,DilutionMAX)
 
 dydxmax <- vector()
-for(i in 1:(length(Neilmax)-1)){
-    dydxmax[i] <- (Neilmax[(i + 1)]-Neilmax[i])
+for(i in 1:(length(DilutionMAX)-1)){
+    dydxmax[i] <- (DilutionMAX[(i + 1)]-DilutionMAX[i])
 }
 
-# plot(1:19,dydxmax)
+# plot(1:49,dydxmax)
 
 maxinfpoint <- which.max(x = dydxmax)
 
@@ -32,7 +35,7 @@ minlogdydx <- log10(min(dydxmax[dydxmax > 0]))
 log_dydxmax <- vector()
 
 log_dydxmax <- rapply(as.list(dydxmax),function(n){  # in raw data for more curves
-    if(n<0){
+    if(n<=0){
         n <- minlogdydx  # if the value is negative, put the log of the min
     } else {
         n <- log10(n)
@@ -41,7 +44,7 @@ log_dydxmax <- rapply(as.list(dydxmax),function(n){  # in raw data for more curv
 
 # plot(1:maxinfpoint,log_dydxmax[1:maxinfpoint])
 
-dydxmin <- maxinfpoint - 3
+dydxmin <- maxinfpoint - 2 
 
 while(summary(lm(dydxmin:maxinfpoint ~ log_dydxmax[dydxmin:maxinfpoint]))$r.squared >= 0.9 ){  # 0.8 to be more carful
     dydxmin <- dydxmin - 1
@@ -56,21 +59,20 @@ while(summary(lm(dydxmin:maxinfpoint ~ log_dydxmax[dydxmin:maxinfpoint]))$r.squa
 source("qPCRV4FUNCTIONS.R")
 
 #### FUNCTION 1  # parameters for the analysis
-Parameters(rowdata = Neilraw)
-
+Parameters(rowdata = DilutionRaw)
 
 Par$Start <- dydxmin
 # this was to find the background level from all the data. The user can define it, but is better to calculate it
 # if the user define it the algorithm should tell him what is the calculated one.
 
 #### FUNCTION 2  # calculate the derivate of the curve to find the inflection point
-Inflection_point(Neilraw)
+Inflection_point(DilutionRaw)
 
-## plot(2:40,dydx[3,])
+## plot(2:50,dydx[3,])
 
 #### Object 1  # We record the names of the well and the inflection points in this Object 1
-inf_curves[1:Par$curves,1] <- DataNeil[1:Par$curves,1]        # Names of the first column
-
+inf_curves[1:Par$curves,1] <- Dilution[1:Par$curves,1]        # Names of the first column
+#fix names
 
 # add the max of the derivate to each curve
 for (curv in 1:Par$curves){
@@ -81,18 +83,11 @@ for (curv in 1:Par$curves){
     }
 }
 
-## now we know that the PCR is exponential from cycle 1 to 28 or inflection point, but the
-## machine only detect data over certain minimum. So it could be 20-28 or 21-28 or 10-28 or any combination...
-
-
-## now we have a bunch of parameters and we need to test which combination is the best for the curve
-## To do that I would still use the log, because it is easy to find the best line in a linear data set...
-
 #### FUNCTION 3
 
-log_Data(rawData = Neilraw,Name = "Neilraw")
+log_Data(rawData = DilutionRaw,Name = "Dilution")
 
-Neilraw_log_Data[1,]
+Dilution_log_Data[1,]
 
 # TEST
 # lm(21:25 ~ Neilraw_log_Data[1,21:25])
@@ -112,7 +107,7 @@ Neilraw_log_Data[1,]
 
 #### FUNCTION 4
 
-Init_Value(Neilraw_log_Data)
+Init_Value(Dilution_log_Data)
 
 # system.time(Init_Value(Neilraw_log_Data))
 #   user  system elapsed 
@@ -140,13 +135,9 @@ Init_Value(Neilraw_log_Data)
 
 inf_curves
 
-plot(1:40,Neilraw[144,])
-test144 <- vector()
-for(i in 1:40){
-    test144[i] <- inf_curves[144,10]*(inf_curves[144,8]^i)
+plot(1:50,DilutionRaw[3,])
+test1 <- vector()
+for(i in 1:50){
+    test1[i] <- inf_curves[3,10]*(inf_curves[3,8]^i)
 }
-points(1:40,test144,col=2)
-
-
-
-
+points(1:50,test1,col=2)
